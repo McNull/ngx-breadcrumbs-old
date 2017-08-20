@@ -19,7 +19,7 @@
     "build": "node build.js",
     "build-demo": "tsc -p src/demo/",
     "build-demo:watch": "tsc -p src/demo/ -w",
-    "serve": "lite-server -c=bs-config.json",
+    "serve": "lite-server -c=bs-config.js",
     "prestart": "npm run build-demo",
     "start": "concurrently \"npm run build-demo:watch\" \"npm run serve\"",
     "build-test": "tsc -p src/lib/tsconfig.spec.json",
