@@ -1,3 +1,3 @@
-export { LibComponent } from './src/component/lib.component';
-export { LibService } from './src/service/lib.service';
-export { LibModule } from './src/module';
+export  *  from './src/component/lib.component';
+export  *  from './src/service/lib.service';
+export  *  from './src/module';

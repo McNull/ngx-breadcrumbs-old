@@ -1,9 +1,9 @@
 
 import { Router } from '@angular/router';
 import { Component } from '@angular/core';
-import { LibService } from 'quickstart-lib';
+import { LibService } from 'ngx-breadcrumbs';
 
-interface INavLink {
+export interface INavLink {
   text: string,
   path: string,
   exact: boolean

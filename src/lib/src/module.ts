@@ -8,4 +8,4 @@ import { LibService } from './service/lib.service';
   providers: [LibService],
   exports: [LibComponent]
 })
-export class LibModule { }
+export class McBreadcrumbsModule { }

@@ -39,7 +39,7 @@
       rxjs: {
         defaultExtension: 'js'
       },
-      'quickstart-lib': {
+      'ngx-breadcrumbs': {
         main: 'index.js',
         defaultExtension: 'js',
         meta: {
