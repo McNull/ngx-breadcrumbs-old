@@ -1,4 +1,4 @@
-import { PersonResolver } from './edit/person-resolver';
+import { PersonResolver } from './person.resolver';
 import { IPerson } from './person.model';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
@@ -9,7 +9,6 @@ import { PersonEditComponent } from './edit/person-edit.component';
 import { PersonListComponent } from './list/person-list.component';
 import { ModuleWithProviders, NgModule } from '@angular/core';
 import { routes } from "./person.routes";
-import { PersonBreadcrumbResolver } from "./edit/person-breadcrumb-resolver";
 
 @NgModule({
   declarations: [
@@ -23,8 +22,7 @@ import { PersonBreadcrumbResolver } from "./edit/person-breadcrumb-resolver";
   ],
   providers: [
     PersonService,
-    PersonResolver,
-    PersonBreadcrumbResolver
+    PersonResolver
   ]
 })
 export class PersonModule {
