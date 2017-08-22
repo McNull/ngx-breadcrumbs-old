@@ -25,6 +25,9 @@
 
       // other libraries
       'rxjs': 'npm:rxjs',
+      'lodash.template': 'npm:lodash.template/index.js',
+      'lodash._reinterpolate': 'npm:lodash._reinterpolate/index.js',
+      'lodash.templatesettings': 'npm:lodash.templatesettings/index.js'
     },
     // packages tells the System loader how to load when no filename and/or no extension
     packages: {

@@ -45,10 +45,12 @@
     "@angular/compiler": "^4.3.5",
     "@angular/compiler-cli": "^4.3.5",
     "@angular/core": "^4.3.5",
+    "@angular/forms": "^4.3.5",
     "@angular/platform-browser": "^4.3.5",
     "@angular/platform-browser-dynamic": "^4.3.5",
     "@angular/router": "^4.3.5",
     "@types/jasmine": "2.5.36",
+    "@types/lodash.template": "^4.4.3",
     "@types/node": "^6.0.46",
     "bootstrap": "4.0.0-beta",
     "camelcase": "^4.0.0",
@@ -77,5 +79,9 @@
     "tslint": "^4.4.2",
     "typescript": "~2.3.0",
     "zone.js": "^0.8.4"
+  },
+  "dependencies": {
+    "lodash.template": "^4.4.0",
+    "lodash.templatesettings": "^4.1.0"
   }
 }

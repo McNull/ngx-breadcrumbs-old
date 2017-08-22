@@ -1,7 +1,7 @@
 
-import { Router } from '@angular/router';
+import { Route, Router } from '@angular/router';
 import { Component } from '@angular/core';
-import { LibService } from 'ngx-breadcrumbs';
+// import { LibService } from 'ngx-breadcrumbs';
 
 export interface INavLink {
   text: string,
@@ -13,7 +13,7 @@ export interface INavLink {
   selector: 'demo-app',
   template: `
     <div>
-      <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container">
           <ul class="navbar-nav">
             <li *ngFor="let link of navLinks" class="nav-item"
@@ -26,6 +26,7 @@ export interface INavLink {
       </nav>
 
       <div class="container">
+        <mc-breadcrumbs></mc-breadcrumbs>
         <router-outlet></router-outlet>
       </div>
     </div>
@@ -40,13 +41,31 @@ export interface INavLink {
 })
 export class AppComponent {
 
-  navLinks: INavLink[];
+  navLinks: INavLink[] = new Array<INavLink>();
 
-  constructor(libService: LibService, router: Router) {
-    this.navLinks = router.config.filter((x) => x.data.nav).map((x) => ({
-      text: x.data.nav.text || x.data.text,
-      path: x.data.nav.path || x.path,
-      exact: x.data.nav.exact
-    }));
+  constructor(router: Router) {
+    // this.navLinks = router.config.filter((x) => x.data && x.data.nav).map((x) => ({
+    //   text: x.data.nav.text || x.data.text,
+    //   path: x.data.nav.path || x.path,
+    //   exact: x.data.nav.exact
+    // }));
+
+    this.getNavLinks(router.config);
+  }
+
+  getNavLinks(routes: Route[]) {
+
+    this.navLinks.push(...
+      routes.filter((x) => x.data && x.data.nav).map((x) => ({
+        text: x.data.nav.text || x.data.text,
+        path: x.data.nav.path || x.path,
+        exact: x.data.nav.exact
+      })));
+
+    routes.forEach((x) => {
+      if(x.children) {
+        this.getNavLinks(x.children);
+      }
+    })
   }
 }

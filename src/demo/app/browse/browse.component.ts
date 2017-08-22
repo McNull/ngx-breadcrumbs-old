@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Observable } from 'rxjs/Observable';
 import { Component, Injectable, OnDestroy } from '@angular/core';
-import { utils } from './utils';
+import { utils } from '../shared/utils';
 
 import 'rxjs/add/operator/filter';
 import 'rxjs/add/operator/map';
