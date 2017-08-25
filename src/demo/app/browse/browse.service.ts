@@ -4,6 +4,9 @@ import { utils } from "../shared/utils";
 import { Observable } from "rxjs/Observable";
 import { Observer } from "rxjs/Observer";
 
+import 'rxjs/add/operator/expand';
+import 'rxjs/add/operator/takeWhile';
+
 @Injectable()
 export class BrowseService {
 
@@ -51,7 +54,7 @@ function createFolders(parentId: string, level: number) {
     folders.push({
       id: id,
       parentId: parentId,
-      name: utils.randomWords(utils.randomInt(2, 5))
+      name: utils.randomWords(utils.randomInt(2, 5), true)
     });
 
     if (level) {

@@ -6,13 +6,13 @@ export interface IBreadcrumb {
   path: string
 }
 
-export interface IBreadcrumbData {
-  text: string
-}
+// export interface IBreadcrumbData {
+//   text: string
+// }
 
-export interface McBreadcrumbsResolve {
-  breadCrumbsResolve(breadCrumb: IBreadcrumb, route: ActivatedRouteSnapshot): IBreadcrumb[];
-}
+// export interface McBreadcrumbsResolve {
+//   breadCrumbsResolve(breadCrumb: IBreadcrumb, route: ActivatedRouteSnapshot): IBreadcrumb[];
+// }
 
 // import * as _template from 'lodash.template';
 // import * as _templateSettings from 'lodash.templatesettings';

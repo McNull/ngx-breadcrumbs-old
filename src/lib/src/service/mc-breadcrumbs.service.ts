@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Injector } from '@angular/core';
 
 import { ActivatedRoute, ActivatedRouteSnapshot, NavigationEnd, Router, RouterState } from '@angular/router';
 
@@ -22,7 +22,7 @@ export class McBreadcrumbsService {
   private _breadcrumbs = new BehaviorSubject<IBreadcrumb[]>([]);
   private _defaultResolver = new McBreadcrumbsResolver();
 
-  constructor(private _router: Router, route: ActivatedRoute, private _config: McBreadcrumbsConfig) {
+  constructor(private _router: Router, route: ActivatedRoute, private _config: McBreadcrumbsConfig, private _injector: Injector) {
 
     this._router.events
       .filter((x) => x instanceof NavigationEnd)
@@ -30,22 +30,10 @@ export class McBreadcrumbsService {
 
         const route = _router.routerState.snapshot.root;
 
-        console.log('resolving');
-
         this._resolveCrumbs(route)
             .flatMap((x) => x)
-            .scan((a, v) => {
-              return {
-                text: v.text,
-                path: a.path + '/' + v.path
-              };
-            }, {
-              text: null,
-              path: ''
-            })
             .toArray()
             .subscribe((x) => {
-              console.log('resolved', x);
               this._breadcrumbs.next(x);
             });
 
@@ -65,11 +53,19 @@ export class McBreadcrumbsService {
       route.routeConfig.data;
 
     if (data && data.breadcrumbs) {
-      console.log('got data');
-      let resolver = this._defaultResolver.resolve(route, this._router.routerState.snapshot);
-      crumbs$ = wrapIntoObservable<IBreadcrumb[]>(resolver).first();
+
+      let resolver : McBreadcrumbsResolver;
+
+      if(data.breadcrumbs.prototype instanceof McBreadcrumbsResolver) {
+        resolver = this._injector.get(data.breadcrumbs);
+      } else {
+        resolver = this._defaultResolver;
+      }
+
+      let result = resolver.resolve(route, this._router.routerState.snapshot);
+      crumbs$ = wrapIntoObservable<IBreadcrumb[]>(result).first();
+
     } else {
-      console.log('no data -> []');
       crumbs$ = Observable.of([]);
     }
 

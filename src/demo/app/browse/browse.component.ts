@@ -9,12 +9,12 @@ import { BrowseService, IFolder } from './browse.service';
 import 'rxjs/add/operator/filter';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/do';
+import { BrowseBreadcrumbsResolver } from "./browse-breadcrumbs.resolver";
 
 ////////////////////////////////////////////////////////////////////
 
 @Component({
-  templateUrl: './browse.component.html',
-  providers: [BrowseService]
+  templateUrl: './browse.component.html'
 })
 export class BrowseComponent implements OnDestroy {
 

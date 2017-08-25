@@ -1,18 +1,26 @@
+import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { BrowseService } from './browse.service';
 import { ActivatedRouteSnapshot, Resolve, RouterStateSnapshot } from '@angular/router';
-import { IBreadcrumb } from '../../../lib/src/mc-breadcrumbs.shared';
+import { IBreadcrumb, McBreadcrumbsResolver } from 'ngx-breadcrumbs';
 
-export class BrowseBreadcrumbsResolver implements Resolve<IBreadcrumb[]> {
+@Injectable()
+export class BrowseBreadcrumbsResolver extends McBreadcrumbsResolver {
 
-  constructor(private service : BrowseService) {}
+  constructor(private service: BrowseService) {
+    super();
+  }
 
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<IBreadcrumb[]> {
 
-    console.log('in resolve');
+    const id = route.params.id;
 
-    const result = new Array<IBreadcrumb>();
-
-    return Observable.of(result).do(() => 'in source');
+    return this.service.getPath(id)
+      .map((folders) =>
+        folders.map((folder) => ({
+            text: folder.name,
+            path: super.getFullPath(route.parent) + '/' + folder.id
+          })
+      ));
   }
 }

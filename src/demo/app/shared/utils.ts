@@ -10,15 +10,22 @@ function randomInt(min: number, max: number): number {
 }
 
 function randomItem<T>(array: Array<T>): T {
-  return array[randomInt(0, array.length)];
+  let idx = randomInt(0, array.length - 1);
+  let result = array[idx];
+  return result;
 }
 
-function randomWords(count: number): string {
-  let result = '';
+function randomWords(count: number, capitalize = false): string {
+
+  const words : string[] = [];
+
   while(count-- > 0) {
-    result += randomItem(lorem) + ' ';
+    let word = randomItem(lorem);
+    if(capitalize) { word = word[0].toLocaleUpperCase() + word.substr(1); }
+    words.push(word);
   }
-  return result.trim();
+
+  return words.join(' ');
 }
 
 function guid(): string {
