@@ -1,5 +1,4 @@
 import { ActivatedRouteSnapshot } from '@angular/router';
-import { IBreadcrumb, McBreadcrumbsResolve } from '../../../lib/src/mc-breadcrumbs.shared';
 import { Observable } from 'rxjs/Observable';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { IPerson } from './person.model';
@@ -10,7 +9,7 @@ import 'rxjs/add/operator/delay';
 import 'rxjs/add/operator/toPromise';
 
 @Injectable()
-export class PersonService implements McBreadcrumbsResolve {
+export class PersonService {
   constructor() { }
 
   private persons = new BehaviorSubject<IPerson[]>(persons);
@@ -44,11 +43,6 @@ export class PersonService implements McBreadcrumbsResolve {
       resolve(person);
     });
   }
-
-  breadCrumbsResolve(breadCrumb: IBreadcrumb, route: ActivatedRouteSnapshot): IBreadcrumb[] {
-    throw new Error("Method not implemented.");
-  }
-
 }
 
 const persons = new Array<IPerson>();

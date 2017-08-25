@@ -1,15 +1,26 @@
+import { Injectable } from '@angular/core';
+
+import { ActivatedRoute, ActivatedRouteSnapshot, NavigationEnd, Router, RouterState } from '@angular/router';
+
 import { Observable } from 'rxjs/Observable';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { ActivatedRoute, ActivatedRouteSnapshot, NavigationEnd, Router, RouterState } from '@angular/router';
-import { Injectable } from '@angular/core';
 import { Subscription } from "rxjs/Subscription";
-import { IBreadcrumb, stringFormat } from "../mc-breadcrumbs.shared";
+
+import 'rxjs/add/observable/of';
+import 'rxjs/add/operator/concat';
+import 'rxjs/add/operator/mergeMap';
+import 'rxjs/add/operator/toArray';
+import 'rxjs/add/operator/scan';
+
+import { IBreadcrumb, stringFormat, wrapIntoObservable } from '../mc-breadcrumbs.shared';
 import { McBreadcrumbsConfig } from "./mc-breadcrumbs.config";
+import { McBreadcrumbsResolver } from './mc-breadcrumbs.resolver';
 
 @Injectable()
 export class McBreadcrumbsService {
 
   private _breadcrumbs = new BehaviorSubject<IBreadcrumb[]>([]);
+  private _defaultResolver = new McBreadcrumbsResolver();
 
   constructor(private _router: Router, route: ActivatedRoute, private _config: McBreadcrumbsConfig) {
 
@@ -17,19 +28,27 @@ export class McBreadcrumbsService {
       .filter((x) => x instanceof NavigationEnd)
       .subscribe((event: NavigationEnd) => {
 
-        const snapshot = _router.routerState.snapshot.root;
-        let crumbs = new Array<IBreadcrumb>();
-        const path = '';
+        const route = _router.routerState.snapshot.root;
 
-        this._buildCrumbPath(snapshot, crumbs, path).then(() => {
-          crumbs = this._config.prefixCrumbs.concat(crumbs).filter((x, idx, self) => {
-            return self.findIndex((y) =>
-              y.path === x.path && y.text === x.text
-            ) === idx;
-          });
+        console.log('resolving');
 
-          this._breadcrumbs.next(crumbs);
-        });
+        this._resolveCrumbs(route)
+            .flatMap((x) => x)
+            .scan((a, v) => {
+              return {
+                text: v.text,
+                path: a.path + '/' + v.path
+              };
+            }, {
+              text: null,
+              path: ''
+            })
+            .toArray()
+            .subscribe((x) => {
+              console.log('resolved', x);
+              this._breadcrumbs.next(x);
+            });
+
       });
   }
 
@@ -37,35 +56,27 @@ export class McBreadcrumbsService {
     return this._breadcrumbs;
   }
 
-  private _buildCrumbPath(snapshot: ActivatedRouteSnapshot, crumbs: IBreadcrumb[], path: string): Promise<any> {
+  private _resolveCrumbs(route: ActivatedRouteSnapshot)
+    : Observable<IBreadcrumb[]> {
 
-    return new Promise((resolve) => {
-      // snapshot.data is a merged result combined from all parents, so we
-      // use the original routeConfig values.
+    let crumbs$: Observable<IBreadcrumb[]>;
 
-      const data = snapshot.routeConfig &&
-        snapshot.routeConfig.data;
+    const data = route.routeConfig &&
+      route.routeConfig.data;
 
-      if (data && data.breadcrumbs) {
+    if (data && data.breadcrumbs) {
+      console.log('got data');
+      let resolver = this._defaultResolver.resolve(route, this._router.routerState.snapshot);
+      crumbs$ = wrapIntoObservable<IBreadcrumb[]>(resolver).first();
+    } else {
+      console.log('no data -> []');
+      crumbs$ = Observable.of([]);
+    }
 
-        const pathSnapshot = snapshot.url.map((x) => x.path).join('/');
-        path += '/' + pathSnapshot;
+    if (route.firstChild) {
+      crumbs$ = crumbs$.concat(this._resolveCrumbs(route.firstChild));
+    }
 
-        const crumb: IBreadcrumb = {
-          text: typeof (data.breadcrumbs) === 'string' ? data.breadcrumbs : data.breadcrumbs.text || data.text || pathSnapshot,
-          path: path
-        };
-
-        crumb.text = stringFormat(crumb.text, snapshot.data);
-        crumbs.push(crumb);
-      }
-
-      if (snapshot.firstChild) {
-        this._buildCrumbPath(snapshot.firstChild, crumbs, path).then(resolve);
-      } else {
-        resolve();
-      }
-    });
+    return crumbs$;
   }
-
 }
