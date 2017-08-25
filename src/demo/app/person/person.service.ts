@@ -50,6 +50,6 @@ const persons = new Array<IPerson>();
 for (let i = 0; i < 20; i++) {
   persons.push({
     id: utils.guid(),
-    name: utils.randomWords(utils.randomInt(2, 4))
+    name: utils.randomWords(utils.randomInt(2, 4), true)
   });
 }

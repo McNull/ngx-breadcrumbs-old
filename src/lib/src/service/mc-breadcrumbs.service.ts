@@ -10,7 +10,7 @@ import 'rxjs/add/observable/of';
 import 'rxjs/add/operator/concat';
 import 'rxjs/add/operator/mergeMap';
 import 'rxjs/add/operator/toArray';
-import 'rxjs/add/operator/scan';
+import 'rxjs/add/operator/distinct';
 
 import { IBreadcrumb, stringFormat, wrapIntoObservable } from '../mc-breadcrumbs.shared';
 import { McBreadcrumbsConfig } from "./mc-breadcrumbs.config";
@@ -30,13 +30,14 @@ export class McBreadcrumbsService {
 
         const route = _router.routerState.snapshot.root;
 
-        this._resolveCrumbs(route)
-            .flatMap((x) => x)
-            .toArray()
-            .subscribe((x) => {
-              this._breadcrumbs.next(x);
-            });
-
+        Observable.of(this._config.prefixCrumbs)
+          .concat(this._resolveCrumbs(route))
+          .flatMap((x) => x)
+          .distinct((x) => x.text)
+          .toArray()
+          .subscribe((x) => {
+            this._breadcrumbs.next(x);
+          });
       });
   }
 

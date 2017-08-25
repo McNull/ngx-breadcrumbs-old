@@ -6,17 +6,6 @@ export interface IBreadcrumb {
   path: string
 }
 
-// export interface IBreadcrumbData {
-//   text: string
-// }
-
-// export interface McBreadcrumbsResolve {
-//   breadCrumbsResolve(breadCrumb: IBreadcrumb, route: ActivatedRouteSnapshot): IBreadcrumb[];
-// }
-
-// import * as _template from 'lodash.template';
-// import * as _templateSettings from 'lodash.templatesettings';
-
 const _template = require('lodash.template');
 const _templateSettings = require('lodash.templatesettings');
 
@@ -39,9 +28,6 @@ export function wrapIntoObservable<T>(value: T | Promise<T> | Observable<T>)
     return value;
 
   if (isPromise(value)) {
-    // Use `Promise.resolve()` to wrap promise-like instances.
-    // Required ie when a Resolver returns a AngularJS `$q` promise to correctly trigger the
-    // change detection.
     return Observable.fromPromise(Promise.resolve(value));
   }
 

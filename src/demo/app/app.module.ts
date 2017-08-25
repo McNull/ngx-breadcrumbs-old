@@ -29,6 +29,11 @@ import { routes } from './shared/app.routes';
 })
 export class AppModule {
   constructor(breadcrumbsConfig: McBreadcrumbsConfig) {
-
+    breadcrumbsConfig.prefixCrumbs = [
+      {
+        text: 'Home',
+        path: '/'
+      }
+    ];
   }
 }

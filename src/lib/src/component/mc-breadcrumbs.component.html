@@ -1,9 +1,6 @@
 <ol *ngIf="crumbs.length" class="breadcrumb">
-  <li *ngFor="let crumb of crumbs" class="breadcrumb-item">
-    <a [routerLink]="crumb.path">{{ crumb.text }}</a>
+  <li *ngFor="let crumb of crumbs; let last = last" [ngClass]="{ 'active': last }" class="breadcrumb-item">
+    <a *ngIf="!last" [routerLink]="crumb.path">{{ crumb.text }}</a>
+    <span *ngIf="last">{{ crumb.text }}</span>
   </li>
-
-  <!-- <li class="breadcrumb-item"><a href="#">Home</a></li>
-  <li class="breadcrumb-item"><a href="#">Library</a></li>
-  <li class="breadcrumb-item active">Data</li> -->
 </ol>

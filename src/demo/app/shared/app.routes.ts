@@ -5,6 +5,7 @@ import { AboutComponent } from '../components/about.component';
 import { HomeComponent } from '../components/home.component';
 import { Routes } from '@angular/router';
 import { PersonModule } from "../person/person.module";
+import { browseRoutes } from "../browse/browse.routes";
 
 const routes : Routes = [
   {
@@ -44,37 +45,8 @@ const routes : Routes = [
       nav: true,
       breadcrumbs: true
     },
-    children: [
-      {
-        path: '',
-        component: BrowseComponent
-      },
-      {
-        path: ':id',
-        component: BrowseComponent,
-        data: {
-          breadcrumbs: BrowseBreadcrumbsResolver
-        }
-      }
-    ]
+    children: browseRoutes
   }
-  // {
-  //   path: 'browse/:id',
-  //   component: BrowseComponent,
-  //   data: {
-  //     text: 'Browse'
-  //   }
-  // },
-  // {
-  //   path: 'browse',
-  //   component: BrowseComponent,
-  //   data: {
-  //     text: 'Browse',
-  //     nav: {
-  //       exact: false
-  //     }
-  //   }
-  // }
 ];
 
 export { routes };
